@@ -29,7 +29,8 @@ RED = (255,0,0)
 
 # HUD
 win.fill(WHITE)
-def draw_window(palabra, colorLetra):
+def draw_window(palabra, colorLetra, fraseBuena):
+    win.fill(WHITE)
     # Izquierda (nombre y marcador)
     pygame.draw.rect(win, (BLACK), pygame.Rect(0, 0, 10, height))
     pygame.draw.rect(win, (BLACK), pygame.Rect(0, 0, width*0.25, 10))
@@ -67,8 +68,10 @@ def draw_window(palabra, colorLetra):
     win.blit(historiaTexto5, (width*0.32, height*0.05 + 25*4, 100, 100))
 
     # Historia medio
-    historiaEscrito = historiaFONT.render( palabra ,1,colorLetra)
-    win.blit(historiaEscrito, (width*0.32, height*0.05 + 25*8, 100, 100))
+    historiaBueno = historiaFONT.render(fraseBuena, 1, BLACK)
+    win.blit(historiaBueno, (width*0.32, height*0.05 + 25*8, 100, 100))
+    historiaEscrito = historiaFONT.render(palabra ,1,colorLetra)
+    win.blit(historiaEscrito, (width*0.32, height*0.05 + 25*10, 100, 100))
 
 
 
@@ -91,6 +94,7 @@ def letraIncorrecta():
 
 
 palabra = ""
+fraseBuena = ""
 colorLetra = RED
 contador = 0
 correcto = True
@@ -110,7 +114,10 @@ while run:
         # Levanto una tecla
         if event.type == pygame.KEYUP:
             tecla = pygame.key.name(event.key)
+            fraseBuena += historia[contador]
+            
             print()
+            print("frase buena: ", fraseBuena)
             print("historia[contador], tecla")
             print(historia[contador],"                    ", tecla)
 
@@ -152,7 +159,7 @@ while run:
         if event.type == pygame.QUIT:
             run = False
     
-    draw_window(palabra,colorLetra)
+    draw_window(palabra, colorLetra, fraseBuena)
     
 
 
