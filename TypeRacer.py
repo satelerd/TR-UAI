@@ -1,11 +1,35 @@
 import pygame
+import time
+import random
+
+randomInt = random.randint(0,3)
 
 pygame.font.init()
 FONT = pygame.font.SysFont("Sans", 40)
-historiaFONT = pygame.font.SysFont("Sans", 20)
+historiaFONT = pygame.font.SysFont("Sans", 24)
 pygame.init()
 
-# Historia aaa
+# Historia UAI
+historiaa = [
+    [
+        "habia una vez un alumno nuevo de la uai, desde su primer dia hasta el ultimo",
+        " nunca logro descubrir el mundo de la universidad, hizo todos sus años online."
+    ],
+    [
+        "hay cosas muy grandes a lo largo del planeta tierra, como el empire state,",
+        " chayane o boquita... pero nada superara a los pumas ingenieros."
+    ],
+    [
+        "el puma camina sabiamente por lo desconocido, guiado por su inteligencia.",
+        " se le ve muy fresco gracias al conocimiento que obtuvo en la uai."
+    ],
+    [
+        "si bien vivimos en lo desconocido, aprendiendo constantemente,",
+        " esta clarisimo que el campus de viña es mucho mas bonito"
+    ]
+]
+
+# Historia
 historia = "en el hotel habia noventa y siete agentes de publicidad neoyorquinos." 
 historiaPalabras = ["en","el","hotel","habia","noventa","y","siete","agentes","de","publicidad","neoyoruinos."]
 historia2 = " como monopolizaban las lineas telefonicas de larga distancia,"
@@ -28,7 +52,7 @@ pygame.display.set_caption("TypeRacer")
 # HUD
 button = pygame.Rect(width*0.35, height*0.75, 170, 90)  
 win.fill(WHITE)
-def draw_window(palabra, colorLetra, fraseBuena):
+def draw_window(palabra, colorLetra, fraseBuena, tiempoTotal, ppm):
     win.fill(WHITE)
 
     # Izquierda del win (nombre y marcador)
@@ -59,11 +83,11 @@ def draw_window(palabra, colorLetra, fraseBuena):
     # Historia arriba
     titulo = FONT.render("Texto que deberás typear:",1,BLACK)
     win.blit(titulo, (width*0.32, height*0.02, 100, 100))
-    historiaTexto = historiaFONT.render(historia,1,BLACK)
+    historiaTexto = historiaFONT.render(historiaa[randomInt][0],1,BLACK)
     win.blit(historiaTexto, (width*0.32+5, height*0.09, 100, 100))
-    historiaTexto2 = historiaFONT.render(historia2,1,BLACK)
+    historiaTexto2 = historiaFONT.render(historiaa[randomInt][1],1,BLACK)
     win.blit(historiaTexto2, (width*0.32, height*0.09 + 25*1, 100, 100))
-    historiaTexto3 = historiaFONT.render(historia3,1,BLACK)
+    # historiaTexto3 = historiaFONT.render(historia3,1,BLACK)
     # win.blit(historiaTexto3, (width*0.32, height*0.09 + 25*2, 100, 100))
     # historiaTexto4 = historiaFONT.render(historia4,1,BLACK)
     # win.blit(historiaTexto4, (width*0.32, height*0.09 + 25*3, 100, 100))
@@ -78,7 +102,7 @@ def draw_window(palabra, colorLetra, fraseBuena):
     historiaEscrito = historiaFONT.render(palabra+"|",1,colorLetra)
     win.blit(historiaEscrito, (width*0.337, height*0.05 + 25*12, 100, 100))
 
-    textInput = pygame.Rect(width*0.33, height*0.05 +25*12, 650, 30) 
+    textInput = pygame.Rect(width*0.33, height*0.05 +25*12, 680, 30) 
     pygame.draw.rect(win,colorLetra, textInput,3)
 
     # Abajo (boton y resultado)
@@ -88,31 +112,66 @@ def draw_window(palabra, colorLetra, fraseBuena):
     pygame.draw.rect(win, [255, 0, 0], button,5)
 
     #timer
-    timerTexto = FONT.render("t-0:00",1,BLACK)
-    win.blit(timerTexto, (width*0.55, height*0.78))
-
     pygame.draw.rect(win, BLACK, pygame.Rect(width*0.65, height*0.6, 10, height))
 
     # Puntaje
-    puntajeTitulo = FONT.render("Puntaje",1,BLACK)
+    puntajeTitulo = FONT.render("Resultados",1,BLACK)
     win.blit(puntajeTitulo, (width*0.675, height*0.64))
 
     if termino:
-        finalTexto = FONT.render("FIN",1,BLACK)
-        win.blit(finalTexto, (width*0.675, height*0.78))
+        tiempoTexto = FONT.render(tiempoTotal+ " segundos",1,BLACK)
+        win.blit(tiempoTexto, (width*0.675, height*0.76))
+        ppmTexto = FONT.render(str(ppm)+ " ppm",1,BLACK)
+        win.blit(ppmTexto, (width*0.675, height*0.85))
 
     pygame.display.update()
 
+# Timer
+def countdown(t):
+    while t:
+        mins, secs = divmod(t, 60)
+        timer = '{:02d}'.format(secs)
 
-    # escribe palabra, y pon q se vea de color verde
+        timerBlock = pygame.Rect(width*0.53, height*0.78, 100, 50) 
+        pygame.draw.rect(win, WHITE, timerBlock)
+        timerTexto = FONT.render("t-"+ timer+" s",1,BLACK)
+        win.blit(timerTexto, (width*0.53, height*0.78))
+        pygame.display.update()
+
+        time.sleep(1)
+        t -= 1
+
+    return time.time()
+    # seconds = 0
+    # minutes = 0
+    # termino = False
+    # while not termino:
+
+    #     timerBlock = pygame.Rect(width*0.53, height*0.78, 100, 50) 
+    #     pygame.draw.rect(win, WHITE, timerBlock)
+    #     timerTexto = FONT.render("t+"+ str(seconds) +" s",1,BLACK)
+    #     win.blit(timerTexto, (width*0.53, height*0.78))
+    #     pygame.display.update()
+
+    #     time.sleep(1)
+    #     seconds = int(time.time() - time_start) - minutes * 60
+    #     if seconds >= 60:
+    #         minutes += 1
+    #         seconds = 0
+        
+    #     if seconds == 10:
+    #         termino = True
 
 
 palabra = ""
 fraseBuena = ""
-historiaFrase = historia
+historiaFrase = historiaa[randomInt][0]
 colorLetra = GREEN
 contador = 0
 contadorHistoria = 0
+contadorPalabras = 0
+tiempoTotal = 0
+ppm = 0
 FPS = 60
 correcto = True
 run = True
@@ -142,6 +201,7 @@ while run:
                     # print('button was pressed at {0}'.format(mouse_pos))
                     comenzar = True
                     fraseBuena = historiaFrase
+                    tiempoEmpieza = countdown(3)
                     break
 
         # Levanto una tecla
@@ -154,6 +214,8 @@ while run:
                 break
             elif tecla == "space":
                 tecla = " "
+            elif tecla == ";":
+                tecla = "ñ"
             elif len(tecla)>1 and tecla != "backspace":
                 # print(tecla)
                 break
@@ -162,43 +224,66 @@ while run:
             if comenzar:
                 # Pasar de historia a h2 a h3...
                 if contador == len(historiaFrase):
+                    # if palabra != fraseBuena[0:len(palabra)]:
+                    #     print("entramos aqui")
+                    #     contador -= 1
+                    #     break
                     # if not correcto:
                     #     contador -= 1
                     #     break
 
                     contador = 0
-                    if contadorHistoria == 0:
-                        historiaFrase = historia2
+                    contadorHistoria += 1
+
+                    if contadorHistoria == 1:
+                        historiaFrase = historiaa[randomInt][1]
+
+                    elif contadorHistoria == 2:
+                        tiempoTermina = time.time()
+                        tiempoTotal = tiempoTermina-tiempoEmpieza
+                        for letter in historiaa[randomInt][0]:
+                            if letter == " ":
+                                contadorPalabras += 1
+                        for letter in historiaa[randomInt][1]:
+                            if letter == " ":
+                                contadorPalabras += 1
+                        ppm = str(contadorPalabras/(tiempoTotal/60))[:5]
+                        tiempoTotal = str(tiempoTotal)[:5]
+
+                        contadorHistoria = 0
+                        comenzar = False
+                        termino = True
+                        break
+
+                    # if contadorHistoria == 0:
+                    #     historiaFrase = historia2
                     # elif contadorHistoria == 1:
                     #     historiaFrase = historia3
                     # elif contadorHistoria == 2:
                     #     historiaFrase = historia4
                     # elif contadorHistoria == 3:
                     #     historiaFrase = historia5
-                    elif contadorHistoria == 1:
-                        contadorHistoria = 0
-                        comenzar = False
-                        termino = True
-                        print("FIIIIIIIIIIIIIIIIIIIIIIIN")
-                        break
+                    # if contadorHistoria == 0:
+                    #     tiempoTermina = time.time()
+                    #     tiempoTotal = tiempoTermina-tiempoEmpieza
+                    #     for letter in historiaFrase:
+                    #         if letter == " ":
+                    #             contadorPalabras += 1
+                    #     ppm = str(contadorPalabras/(tiempoTotal/60))[:5]
+                    #     tiempoTotal = str(tiempoTotal)[:5]
+
+                        # contadorHistoria = 0
+                        # comenzar = False
+                        # termino = True
+                        # break
                     palabra = ""
                     fraseBuena = ""
-                    contadorHistoria += 1
+                    
 
 
                 fraseBuena = historiaFrase
 
-                print()
-                # print("frase buena: ", fraseBuena)
-                # print("historia[contador], tecla")
-                # print(historia[contador],"                    ", tecla)
-
-                # Definir si esta bien o mal
-                print()
-                # print(palabra)
-                # print(fraseBuena[0:contador])
-                print
-                if palabra == fraseBuena[0:contador]:
+                if palabra == fraseBuena[0:len(palabra)]:
                     correcto = True
                 else:
                     correcto = False
@@ -208,12 +293,9 @@ while run:
                     if correcto:
                         palabra += tecla
                         colorLetra = GREEN
-                        print("Correcto")
                     else:
                         palabra += tecla
                         colorLetra = RED
-                        print("Incorrecto")
-                        # deberia ser letraIncorrecta()
 
                 # elif "tecla pa atras hay q cont -= 1"
                 elif tecla == "backspace":
@@ -226,14 +308,12 @@ while run:
                 else:
                     palabra += tecla
                     colorLetra = RED
-                    # print("palabra: ",palabra)
-                    print("Incorrecto")
 
                 contador += 1
         
         
     
-    draw_window(palabra, colorLetra, fraseBuena)
+    draw_window(palabra, colorLetra, fraseBuena, tiempoTotal, ppm)
     
 
 
