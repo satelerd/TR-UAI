@@ -1,5 +1,5 @@
 # Type Racer UAI
-#### Proyecto para el segundo desafío de ingeniería del Centro de Estudiantes Ingeniería Civil UAI Viña.
+#### Proyecto que quedó en segundo lugar para el desafío de ingeniería del Centro de Estudiantes Ingeniería Civil UAI.
 
 ## ¿Como usar?
 #### Simplemente descargar los archivos "TypeRacer V2.py" y "stars_bg.jpg" (opcional)
